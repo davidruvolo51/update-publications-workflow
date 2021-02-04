@@ -1,36 +1,23 @@
-#'////////////////////////////////////////////////////////////////////////////
-#' FILE: pubmed_api.R
-#' AUTHOR: David Ruvolo
-#' CREATED: 2021-01-20
-#' MODIFIED: 2021-01-21
-#' PURPOSE: source publications list from pubmed
-#' STATUS: in.progress
-#' PACKAGES: *see below*
-#' COMMENTS: NA
-#'////////////////////////////////////////////////////////////////////////////
+##////////////////////////////////////////////////////////////////////////////
+## FILE: pubmed_api.R
+## AUTHOR: David Ruvolo
+## CREATED: 2021-01-20
+## MODIFIED: 2021-01-21
+## PURPOSE: source publications list from pubmed
+## STATUS: in.progress
+## PACKAGES: *see below*
+## COMMENTS: NA
+##////////////////////////////////////////////////////////////////////////////
 
-#' pubmed
-#'
-#' Methods for extacting pubmed data
-#'
-#' @noRd
+# pubmed
+# Methods for extacting pubmed data
 pubmed <- structure(list(), class = "pubmed")
 
-#' get_ids
-#'
-#' In order to return publication metadata, you need to first retreive
-#' publication IDs. You can do this by building a query and using
-#' `get_ids`. Result is a character array.
-#'
-#' @param query a search query to run
-#'
-#' @examples
-#' q <- "\"Genome of the Netherlands consortium\"[Corporate Author]"
-#' ids <- pubmed$get_ids(query = q)
-#'
-#' @return Get list of publication IDs
-#'
-#' @noRd
+# get_ids
+#
+# In order to return publication metadata, you need to first retreive
+# publication IDs. You can do this by building a query and using
+# `get_ids`. Result is a character array.
 pubmed$get_ids <- function(query) {
 
     response <- httr::GET(
@@ -56,14 +43,10 @@ pubmed$get_ids <- function(query) {
     }
 }
 
-#' get_metadata
-#'
-#' Using the list of publication IDs, you can now extract publication
-#' metadata. Pass the output of `get_ids`.
-#'
-#' @param ids a character array containing a list of IDs (output from get_ids)
-#'
-#' @noRd
+# get_metadata
+#
+# Using the list of publication IDs, you can now extract publication
+# metadata. Pass the output of `get_ids`.
 pubmed$get_metadata <- function(ids, delay = 0.5) {
     out <- data.frame()
     for (n in seq_len(length(ids))) {
@@ -83,14 +66,8 @@ pubmed$get_metadata <- function(ids, delay = 0.5) {
     out
 }
 
-
-#' make_request
-#'
-#' Make a GET request for a single publication ID
-#'
-#' @param id a publication ID
-#'
-#' @noRd
+# make_request
+# Make a GET request for a single publication ID
 pubmed$make_request <- function(id) {
     httr::GET(
         url = paste0(
@@ -105,13 +82,8 @@ pubmed$make_request <- function(id) {
     )
 }
 
-#' clean_request
-#'
-#' Clean the result of `make_request`
-#'
-#' @param x a result from `make_request`
-#'
-#' @noRd
+# clean_request
+# Clean the result of `make_request`
 pubmed$clean_request <- function(x) {
     id <- x[["result"]][["uids"]]
     data.frame(
@@ -128,13 +100,8 @@ pubmed$clean_request <- function(x) {
     )
 }
 
-#' build_df
-#'
-#' Compile results from `get_metadata` into a tidy object
-#'
-#' @param x an output from get_metadata
-#'
-#' @noRd
+# build_df
+# Compile results from `get_metadata` into a tidy object
 pubmed$build_df <- function(x) {
     x %>%
         # clean publication data and prepare html attributes for
