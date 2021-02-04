@@ -9,36 +9,12 @@
 #' COMMENTS: NA
 #'////////////////////////////////////////////////////////////////////////////
 
-#' pkgs
-#' install.packages("dplyr")
-#' install.packages("httr")
-#' install.packages("rjson")
-#' install.packages("cli")
-#' install.packages("purrr")
-#' install.packages("tibble")
-#' install.packages("rlist")
-#' install.packages("htmltools")
-
-#' test packages
-#' packageVersion("dplyr")
-#' packageVersion("httr")
-#' packageVersion("rjson")
-#' packageVersion("cli")
-#' packageVersion("purrr")
-#' packageVersion("tibble")
-#' packageVersion("rlist")
-#' packageVersion("htmltools")
-#' packageVersion("stringr")
-
-#' load pkgs for current script
-suppressPackageStartupMessages(library(dplyr))
-
 #' pubmed
 #'
 #' Methods for extacting pubmed data
 #'
-#' @export
-pubmed <- list(class = "pubmed")
+#' @noRd
+pubmed <- structure(list(), class = "pubmed")
 
 #' get_ids
 #'
@@ -54,7 +30,7 @@ pubmed <- list(class = "pubmed")
 #'
 #' @return Get list of publication IDs
 #'
-#' @export
+#' @noRd
 pubmed$get_ids <- function(query) {
 
     response <- httr::GET(
@@ -76,9 +52,7 @@ pubmed$get_ids <- function(query) {
             `[[`("esearchresult") %>%
             `[[`("idlist")
     } else {
-        m <- "An error occurred {.val {response$status_code}}"
-        cli::cli_alert_danger(m)
-        response
+        stop(paste0("An error occurred: ", response$status_code))
     }
 }
 
@@ -89,32 +63,24 @@ pubmed$get_ids <- function(query) {
 #'
 #' @param ids a character array containing a list of IDs (output from get_ids)
 #'
-#' @examples
-#'
-#' @export
+#' @noRd
 pubmed$get_metadata <- function(ids, delay = 0.5) {
     out <- data.frame()
-    purrr::imap(ids, function(.x, .y) {
-        response <- pubmed$make_request(.x)
+    for (n in seq_len(length(ids))) {
+        response <- pubmed$make_request(ids[n])
         if (response$status_code == 200) {
             raw <- httr::content(response, as = "text", encoding = "UTF-8")
             result <- rjson::fromJSON(raw)
             df <- pubmed$clean_request(result)
             if (NROW(df) > 0) {
-                cli::cli_alert_success("Returned data for id: {.val {.x}}")
                 out <<- rbind(out, df)
-            } else {
-                cli::cli_alert_warning("Nothing returned for id: {.val {.x}}")
-                response
             }
         } else {
-            m <- "An error occurred {.val {response$status_code}}"
-            cli::cli_alert_danger(m)
-            response
+            warning(paste0("Query failed:", response$status_code))
         }
         Sys.sleep(delay)
-    })
-    tibble::as_tibble(out)
+    }
+    out
 }
 
 
@@ -145,7 +111,7 @@ pubmed$make_request <- function(id) {
 #'
 #' @param x a result from `make_request`
 #'
-#' @export
+#' @noRd
 pubmed$clean_request <- function(x) {
     id <- x[["result"]][["uids"]]
     data.frame(
@@ -168,7 +134,7 @@ pubmed$clean_request <- function(x) {
 #'
 #' @param x an output from get_metadata
 #'
-#' @export
+#' @noRd
 pubmed$build_df <- function(x) {
     x %>%
         # clean publication data and prepare html attributes for
