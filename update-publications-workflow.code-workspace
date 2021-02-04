@@ -1,0 +1,20 @@
+{
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "markdownlint.config": {
+      "MD041": false
+    }
+  },
+  "extensions": {
+    "recommendations": [
+      "shd101wyy.markdown-preview-enhanced",
+      "alanwalk.markdown-toc",
+      "ikuyadeu.r",
+      "reditorsupport.r-lsp"
+    ]
+  }
+}
