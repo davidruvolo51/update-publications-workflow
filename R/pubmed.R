@@ -49,21 +49,28 @@ pubmed$get_ids <- function(query) {
 # metadata. Pass the output of `get_ids`.
 pubmed$get_metadata <- function(ids, delay = 0.5) {
     out <- data.frame()
-    for (n in seq_len(length(ids))) {
-        response <- pubmed$make_request(ids[n])
+    purrr::imap(ids, function(.x, .y) {
+        response <- pubmed$make_request(.x)
         if (response$status_code == 200) {
             raw <- httr::content(response, as = "text", encoding = "UTF-8")
             result <- rjson::fromJSON(raw)
             df <- pubmed$clean_request(result)
             if (NROW(df) > 0) {
-                out <<- rbind(out, df)
+                message(paste0("  - Returned data for id: ", .x))
+                if (.y == 1) {
+                    out <<- df
+                } else {
+                    out <<- rbind(out, df)
+                }
+            } else {
+                message(paste0("  - Nothing for id: ", .x))
             }
         } else {
             warning(paste0("Query failed:", response$status_code))
         }
         Sys.sleep(delay)
-    }
-    out
+    })
+    return(out)
 }
 
 # make_request
@@ -86,18 +93,24 @@ pubmed$make_request <- function(id) {
 # Clean the result of `make_request`
 pubmed$clean_request <- function(x) {
     id <- x[["result"]][["uids"]]
-    data.frame(
+    data <- data.frame(
         uid = id,
         sortpubdate = x[["result"]][[id]][["sortpubdate"]],
         fulljournalname = x[["result"]][[id]][["fulljournalname"]],
         volume = x[["result"]][[id]][["volume"]],
         elocationId = x[["result"]][[id]][["elocationid"]],
-        title = x[["result"]][[id]][["title"]],
-        authors = x[["result"]][[id]][["authors"]] %>%
-            rlist::list.stack() %>%
-            pull(name) %>%
-            paste0(., collapse = ", ")
+        title = x[["result"]][[id]][["title"]]
     )
+    data$authors <- paste0(
+        sapply(
+            x[["result"]][[id]][["authors"]],
+            function(n) {
+                n[["name"]]
+            }
+        ),
+        collapse = "; "
+    )
+    return(data)
 }
 
 # build_df
