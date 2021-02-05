@@ -66,14 +66,9 @@ jobs:
 
       - name: Commit
         run: |
-          git config --local user.email "actions@github.com"
-          git config --local user.name "GitHub Actions"
-          git add --all
+          git add --all --author 'GitHub Actions <actions@github.com>'
           git commit -m 'updated publications'
-
-      - uses: r-lib/actions/pr-push@v1
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          git push
 
       - name: Session info
         run: |
