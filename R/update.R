@@ -9,6 +9,7 @@
 ## COMMENTS: NA
 ##////////////////////////////////////////////////////////////////////////////
 
+suppressPackageStartupMessages(library(dplyr))
 
 # create object containing existing api queries and publications
 queries <- read.csv("data/api_queries.csv")
