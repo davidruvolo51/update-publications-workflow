@@ -66,9 +66,11 @@ jobs:
 
       - name: Commit
         run: |
-          git add --all --author 'GitHub Actions <actions@github.com>'
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+          git add --all
           git commit -m 'updated publications'
-          git push
+          git push origin main
 
       - name: Session info
         run: |
