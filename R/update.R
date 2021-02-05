@@ -50,7 +50,7 @@ api$ids <- api$ids[!api$ids %in% data$uid]
 
 # fetch publication metadata (if there are new Ids)
 if (length(api$ids)) {
-    message(paste0("Pulling Metadata for new IDs: ", api$ids))
+    message(paste0("Pulling Metadata for new IDs: ", api$ids, "\n"))
     result <- pubmed$get_metadata(
         ids = api$ids,
         delay = sample(runif(50, 0.75, 2), length(api$ids))
@@ -58,7 +58,7 @@ if (length(api$ids)) {
 
     # prepare publications dataset
     pubs <- pubmed$build_df(data = result)
-    message(paste0("Returned data dims:", dims(pubs)))
+    message(paste0("Returned data dims:", dim(pubs)))
 
     # save data
     message("Saving new publications!")
