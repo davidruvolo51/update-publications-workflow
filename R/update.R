@@ -16,12 +16,12 @@ queries <- data.frame()
 data <- data.frame()
 tryCatch({
     message("Loaded reference datasets\n")
-    queries <<- read.csv("data/api_queries.csv")
-    data <<- read.csv("data/publications.csv")
-}, error = function(err) {
-    warning(paste0("Unable to load reference datasets:\n", w, "\n"))
-}, warning = function(w) {
-    warning(paste0("Unable to load reference datasets:\n", w, "\n"))
+    queries <<- read.csv("https://raw.githubusercontent.com/davidruvolo51/update-publications-workflow/main/data/api_queries.csv")
+    data <<- read.csv("https://raw.githubusercontent.com/davidruvolo51/update-publications-workflow/main/data/publications.csv")
+}, error = function(error) {
+    warning("Unable to load reference datasets\n")
+}, warning = function(warn) {
+    warning("Unable to load reference datasets\n")
 })
 
 # Init object to write api results into
