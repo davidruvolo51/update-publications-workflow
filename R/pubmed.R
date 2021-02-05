@@ -103,27 +103,24 @@ pubmed$clean_request <- function(x) {
 # build_df
 # Compile results from `get_metadata` into a tidy object
 pubmed$build_df <- function(x) {
-    x %>%
-        # clean publication data and prepare html attributes for
-        # doi link
-        mutate(
-            sortpubdate = lubridate::ymd_hm(sortpubdate) %>%
-                as.Date(.),
-            doi_url = stringr::str_replace_all(
-                string = elocationId,
-                pattern = "doi: ",
-                replacement = "https://doi.org/"
-            ),
-            doi_label = stringr::str_replace_all(
-                string = elocationId,
-                pattern = "doi: ",
-                replacement = ""
-            )
-        ) %>%
-        select(-elocationId) %>%
-        arrange(desc(sortpubdate)) %>%
-        mutate(
-            sortpubdate = lubridate::year(sortpubdate),
-            html_order = rev(seq_len(length(uid)))
-        )
+    x$sortpubdate <- as.Date(lubridate::ymd_hm(x$sortpubdate))
+    x$doi_url <- stringr::str_replace_all(
+        string = x$elocationId,
+        pattern = "doi: ",
+        replacement = "https://doi.org/"
+    )
+    x$doi_label <- stringr::str_replace_all(
+        string = elocationId,
+        pattern = "doi: ",
+        replacement = ""
+    )
+    x$doi_label <- stringr::str_replace_all(
+        string = elocationId,
+        pattern = "doi: ",
+        replacement = ""
+    )
+    x$elocationId <- NULL
+    x <- x[order(x$sortpubdate, decreasing = TRUE), ]
+    x$html_order <- rev(seq_len(length(x$uid)))
+    return(x)
 }
