@@ -70,7 +70,7 @@ jobs:
           git config --local user.name "GitHub Actions"
           git add --all
           git commit -m 'updated publications'
-          git push origin main
+          git push
 
       - name: Session info
         run: |
