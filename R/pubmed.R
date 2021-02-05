@@ -110,12 +110,7 @@ pubmed$build_df <- function(x) {
         replacement = "https://doi.org/"
     )
     x$doi_label <- stringr::str_replace_all(
-        string = elocationId,
-        pattern = "doi: ",
-        replacement = ""
-    )
-    x$doi_label <- stringr::str_replace_all(
-        string = elocationId,
+        string = x$elocationId,
         pattern = "doi: ",
         replacement = ""
     )
