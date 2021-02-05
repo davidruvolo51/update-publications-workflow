@@ -27,7 +27,7 @@ jobs:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
 
-      - uses: r-lib/actions/setup-pandoc@master
+      # - uses: r-lib/actions/setup-pandoc@master
 
       - name: Query dependencies
         run: |
@@ -62,8 +62,9 @@ jobs:
         run: |
           source("R/pubmed.R")
           source("R/update.R")
+        shell: Rscript {0}
 
-      - name: commit
+      - name: Commit
         run: |
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
