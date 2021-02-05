@@ -2,9 +2,9 @@
 #' FILE: dev.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2021-02-04
-#' MODIFIED: 2021-02-04
+#' MODIFIED: 2021-02-05
 #' PURPOSE: pkg management
-#' STATUS: in.progress
+#' STATUS: working
 #' PACKAGES: NA
 #' COMMENTS: NA
 #'////////////////////////////////////////////////////////////////////////////

@@ -4,7 +4,7 @@
 ## CREATED: 2021-02-04
 ## MODIFIED: 2021-02-05
 ## PURPOSE: entry point for GitHub Action
-## STATUS: in.progress
+## STATUS: working
 ## PACKAGES: see below and in `R/pubmed.R`
 ## COMMENTS: NA
 ##////////////////////////////////////////////////////////////////////////////
@@ -79,7 +79,7 @@ if (length(api$ids)) {
 
     # save data
     message("Saving data...")
-    write.csv(rbind(data, pubs), "data/test.csv", row.names = FALSE)
+    write.csv(rbind(data, pubs), "data/publications.csv", row.names = FALSE)
 } else {
     message("No new publications! :-)")
 }

@@ -2,10 +2,10 @@
 ## FILE: pubmed_api.R
 ## AUTHOR: David Ruvolo
 ## CREATED: 2021-01-20
-## MODIFIED: 2021-01-21
+## MODIFIED: 2021-02-05
 ## PURPOSE: source publications list from pubmed
-## STATUS: in.progress
-## PACKAGES: *see below*
+## STATUS: working
+## PACKAGES: *see DESCRIPTION*
 ## COMMENTS: NA
 ##////////////////////////////////////////////////////////////////////////////
 
@@ -130,6 +130,5 @@ pubmed$build_df <- function(data) {
     )
     d$elocationId <- NULL
     d <- d[order(d$sortpubdate, decreasing = TRUE), ]
-    d$html_order <- rev(seq_len(length(d$uid)))
     return(d)
 }
