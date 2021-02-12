@@ -117,6 +117,7 @@ pubmed$clean_request <- function(x) {
 # Compile results from `get_metadata` into a tidy object
 pubmed$build_df <- function(data) {
     d <- data
+    d$uid <- as.character(d$uid)
     d$sortpubdate <- as.Date(lubridate::ymd_hm(d$sortpubdate))
     d$doi_url <- stringr::str_replace_all(
         string = d$elocationId,
@@ -130,5 +131,6 @@ pubmed$build_df <- function(data) {
     )
     d$elocationId <- NULL
     d <- d[order(d$sortpubdate, decreasing = TRUE), ]
+    d$sortpubdate <- as.character(d$sortpubdate)
     return(d)
 }
