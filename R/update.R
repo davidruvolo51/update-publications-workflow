@@ -15,8 +15,8 @@ suppressPackageStartupMessages(library(dplyr))
 message("Loading reference datasets:")
 queries <- tryCatch({
     message("  - API queries: success!")
-    # read.csv("data/api_queries.csv")
-    read.csv("https://raw.githubusercontent.com/davidruvolo51/update-publications-workflow/main/data/api_queries.csv")
+    read.csv("data/api_queries.csv")
+    # read.csv("https://raw.githubusercontent.com/davidruvolo51/update-publications-workflow/main/data/api_queries.csv")
 }, error = function(error) {
     warning("Unable to load reference datasets")
 }, warning = function(warn) {
@@ -25,8 +25,8 @@ queries <- tryCatch({
 
 data <- tryCatch({
     message("  - publications: complete!")
-    # read.csv("data/publications.csv")
-    read.csv("https://raw.githubusercontent.com/davidruvolo51/update-publications-workflow/main/data/publications.csv")
+    read.csv("data/publications.csv")
+    # read.csv("https://raw.githubusercontent.com/davidruvolo51/update-publications-workflow/main/data/publications.csv")
 }, error = function(error) {
     warning("  - publications: failed (error)")
     return(FALSE)
