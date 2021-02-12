@@ -33,6 +33,8 @@ results <- pubmed$get_metadata(
     delay = sample(runif(50, 0.75, 2), length(api$ids))
 )
 
+final <- pubmed$build_df(results)
+
 #' write data
 write.csv(api$query, "data/api_queries.csv", row.names = FALSE)
-write.csv(results, "data/publications.csv", row.names = FALSE)
+write.csv(final[2, ], "data/publications.csv", row.names = FALSE)
